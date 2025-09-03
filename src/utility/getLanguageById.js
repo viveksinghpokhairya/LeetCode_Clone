@@ -1,6 +1,7 @@
 const getLanguageById = (lang) => {
     const language = {
         "c++": 54,
+        "cpp": 54,
         "c": 50,
         "python": 109,
         "java": 91,

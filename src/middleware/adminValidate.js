@@ -4,6 +4,7 @@ const User = require('../config/userSchema');
 
 async function adminValidate(req, res, next) {
     try {
+        console.log("admin validation is called");
         const adminToken = req.cookies.token;
         if (!adminToken) {
             return res.send("login again")

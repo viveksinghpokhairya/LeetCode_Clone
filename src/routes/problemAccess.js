@@ -20,14 +20,12 @@ problemAccess.get("/all", userValidate, async (req, res) => {
 problemAccess.get("/getAllProblemsSolved",userValidate, async (req, res) => {
     try{
         const userId = req.body.userId;
-        console.log(req.body)
-        console.log(userId)
-        const data = await User.findById(userId).populate("problemSolved");
-        console.log(data);
-        if(!data){
+        // console.log(userId);
+        const Data = await User.findById(userId).select("problemSolved");
+        if(!Data){
             res.status(400).send("unable to access the problems");
         } 
-        res.status(200).send(data);
+        res.status(200).send(Data.problemSolved);
     }       
     catch(err){
         res.status(400).send(err.message);

@@ -60,9 +60,11 @@ userRouter.get("/", async (req, res) => {
 });
 
 
-userRouter.get("/login", async (req, res) => {
+userRouter.post("/login", async (req, res) => {
     try {
         const loginDetails = req.body;
+        console.log("login is called");
+        console.log(loginDetails)
         if (!loginDetails) {
             throw new Error("fill all the detials");
         }
@@ -87,6 +89,7 @@ userRouter.get("/login", async (req, res) => {
             name: backend.name,
             id: backend._id,
             email: backend.email,
+            user: backend.user
         }
         const token = await jwt.sign({"id": backend._id, "name": backend.name, "email": backend.email}, process.env.SECRET_KEY, { expiresIn: "1h" });
         res.cookie("token", token);
@@ -108,7 +111,6 @@ userRouter.post("/logout", async (req, res) => {
             return res.status(401).send("already looged out");
         }
         const payload = jwt.verify(loginToken, process.env.SECRET_KEY);
-        console.log(payload)
         await client.set(`token:${loginToken}`, "blocked");
         await client.expireAt(`token:${loginToken}`, payload.exp);
         res.cookie("token", null, new Date(Date.now()));
@@ -182,7 +184,6 @@ userRouter.get("/getSubmission/:pid", userValidate, async(req, res) => {
 
 userRouter.get("/check", userValidate, async (req, res) => {
     const userId = req.body.userId;
-    console.log(userId)
     const userData = await User.findById(userId);
     const reply = {
         name: userData.name,

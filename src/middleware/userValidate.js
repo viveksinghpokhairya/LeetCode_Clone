@@ -12,7 +12,6 @@ const userValidate = async (req, res, next) => {
         if (isBlocked) {
             return res.status(403).send("Token is blocked (logged out)");
         }
-        const userId = payload.id;
         req.body = { ...req.body, userId: payload.id };
         next();
     } catch (err) {
