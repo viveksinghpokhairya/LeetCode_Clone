@@ -10,16 +10,11 @@ const codeVerify = require("../utility/codeVerify")
 //problem creation
 problemRouter.post("/create", adminValidate, async (req, res) => {
     try {
-        console.log("creation is called");
         const { visibleTestCases, Solution } = req.body;
-        console.log(visibleTestCases)
-        console.log(Solution)
-        console.log("this is visible solution and test cases");
         const correctCode = await codeVerify(Solution, visibleTestCases);
         if (!correctCode) {
             return res.status(400).send("Wrong Code");
         }
-        console.log("this is the output of the code:"+ correctCode)
         await Problem.create({
             ...req.body,
             problemCreator: req.result._id

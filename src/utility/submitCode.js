@@ -9,7 +9,7 @@ const submitCode = async (submission) => {
             wait: "false"              
         },
         headers: {
-            "x-rapidapi-key": "683857420emsha9085824a13f164p13a170jsn2a6d5f4d42ec",
+            "x-rapidapi-key": process.env.JUDGE_KEY,
             "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
             "Content-Type": "application/json"
         },

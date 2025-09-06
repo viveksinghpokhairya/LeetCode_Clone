@@ -4,10 +4,12 @@ const cookieParser = require('cookie-parser');
 const database = require("./config/db");
 // const User = require("./cofig/userSchema");
 const userRouter = require('./routes/user');
+const AIrouter = require("./routes/genai")
 const client = require("./redis/redisLogin")
 const problemRouter = require("./routes/problemCreation");
 const problemAccess = require("./routes/problemAccess")
 const problemSubmition = require("./routes/problemSubmition")
+const videoRouter = require("./routes/videoCreator")
 const cors = require("cors");
 const app = express();
 
@@ -23,6 +25,8 @@ app.use("/user", userRouter);
 app.use("/problem", problemRouter);
 app.use("/question", problemAccess);
 app.use("/submission", problemSubmition);
+app.use("/ai", AIrouter);
+app.use("/video", videoRouter);
 
 async function index() {
     try{

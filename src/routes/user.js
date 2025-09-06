@@ -25,7 +25,7 @@ userRouter.post("/register", async (req, res) => {
             id: backend._id,
             email: backend.email,
         }
-        const token = await jwt.sign({"id": backend._id, "name": backend.name, "email": backend.email}, process.env.SECRET_KEY, { expiresIn: "1h" });
+        const token = await jwt.sign({ "id": backend._id, "name": backend.name, "email": backend.email }, process.env.SECRET_KEY, { expiresIn: "1h" });
         res.cookie("token", token);
         res.status(200).json({
             user: reply,
@@ -33,8 +33,13 @@ userRouter.post("/register", async (req, res) => {
         });
     }
     catch (err) {
-        res.send(err.message);
+        if (err.code === 11000) {
+            return res.status(400).json({ message: "Email already exists" });
+        }
+
+        res.status(500).json({ message: "Something went wrong" });
     }
+
 })
 
 
@@ -63,8 +68,6 @@ userRouter.get("/", async (req, res) => {
 userRouter.post("/login", async (req, res) => {
     try {
         const loginDetails = req.body;
-        console.log("login is called");
-        console.log(loginDetails)
         if (!loginDetails) {
             throw new Error("fill all the detials");
         }
@@ -91,7 +94,7 @@ userRouter.post("/login", async (req, res) => {
             email: backend.email,
             user: backend.user
         }
-        const token = await jwt.sign({"id": backend._id, "name": backend.name, "email": backend.email}, process.env.SECRET_KEY, { expiresIn: "1h" });
+        const token = await jwt.sign({ "id": backend._id, "name": backend.name, "email": backend.email }, process.env.SECRET_KEY, { expiresIn: "1h" });
         res.cookie("token", token);
         res.status(200).json({
             user: reply,
@@ -137,7 +140,7 @@ userRouter.post("/admin/register", async (req, res) => {
         if (!user) {
             return res.status(404).send("User not found");
         }
-        if(user.user !== "admin"){
+        if (user.user !== "admin") {
             throw new Error("This in not admin");
         }
         const newAdmin = req.body;
@@ -154,30 +157,30 @@ userRouter.post("/admin/register", async (req, res) => {
 })
 
 userRouter.delete("/deleteProfile", userValidate, async (req, res) => {
-    try{
+    try {
         const userId = req.body.userId;
         console.log(userId);
         await User.findByIdAndDelete(userId);
-        await submission.deleteMany({userId});
+        await submission.deleteMany({ userId });
         res.status(200).send("Profile deleted succesfully");
     }
-    catch(err){
+    catch (err) {
         res.status(400).send("unable to delete the profile");
     }
 })
 
 
-userRouter.get("/getSubmission/:pid", userValidate, async(req, res) => {
-    try{
+userRouter.get("/getSubmission/:pid", userValidate, async (req, res) => {
+    try {
         const pid = req.params.pid;
         const userId = req.body.userId;
-        const data = await submission.find({userId: userId, problemId: pid});
-        if(data.length == 0){
-            res.status(200).send("No data present");
+        const data = await submission.find({ userId: userId, problemId: pid });
+        if (data.length == 0) {
+            res.status(200).send([]);
         }
         res.status(200).send(data);
     }
-    catch(err){
+    catch (err) {
         res.status(400).send("Error fetching the submissions");
     }
 })

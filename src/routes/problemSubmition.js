@@ -64,7 +64,6 @@ problemSubmition.post("/submit/:id", userValidate, async (req, res) => {
     try {
         const { id } = req.params;
         const problem = await Problem.findById(id);
-        console.log("submittion is called")
         if (!problem) {
             return res.status(404).send("Problem not found");
         }
@@ -80,7 +79,6 @@ problemSubmition.post("/submit/:id", userValidate, async (req, res) => {
         let memory = 0;
         let status = "accepted";
         let errorMessage = null;
-        console.log("hello");
         for (const test of testResult) {
             if (test.status_id == 3) {
                 testCasesPassed++;

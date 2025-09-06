@@ -17,10 +17,12 @@
   },
   "homepage": "https://github.com/viveksinghpokhairya/LeetCode_Clone#readme",
   "dependencies": {
+    "@google/genai": "^1.17.0",
     "@monaco-editor/react": "^4.7.0",
     "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.11.0",
     "bcrypt": "^6.0.0",
+    "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
